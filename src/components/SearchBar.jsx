@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import './SearchBar.css';
 
 export const SearchBar = ({ setResults }) => {
   const [input, setInput] = useState('');
 
-  const fetchData = (value) => {
-    fetch('https://jsonplaceholder.typicode.com/users')
+  const fetchData = async (value) => {
+    const options = {
+      method: 'GET',
+      headers: {
+        accept: 'application/json',
+        Authorization:
+          'Bearer QisZwEiIHRdIAcw1iRZI--TaYfbJmLwmeW6VsehRYs7V1aDMITd0_DEZLgNe-z9ta7OcGjtdcgXx53ehIClQs_mIKGhzZSMVxhtbL3TXegMuuV5XFM-BFdV8Qmk9ZnYx',
+      },
+    };
+
+    fetch(
+      'https://api.yelp.com/v3/businesses/search?location=LA&categories=coffee&categories=tea&attributes=wifi_free&attributes=gender_neutral_restrooms&sort_by=best_match&limit=20',
+      options
+    )
       .then((response) => response.json())
-      .then((json) => {
-        const results = json.filter((user) => {
-          return (
-            value &&
-            user &&
-            user.name &&
-            user.name.toLowerCase().includes(value)
-          );
-        });
-        setResults(results);
-      });
+      .then((response) => console.log(response))
+      .catch((err) => console.error(err));
   };
 
   const handleChange = (value) => {
